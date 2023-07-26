@@ -71,20 +71,25 @@ nvim_lsp.flow.setup {
   on_attach = on_attach,
   capabilities = capabilities
 }
-
-nvim_lsp.tsserver.setup {
-  on_attach = on_attach,
-  filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
-  cmd = { "typescript-language-server", "--stdio" },
-  capabilities = capabilities
-}
-
-require'lspconfig'.pyright.setup {
+nvim_lsp.tsserver.setup {}
+nvim_lsp.pyright.setup { --You have to have installed django-stubs and djangorestframework-stubs
   on_attach = on_attach,
   capabilities = capabilities,
+  settings = {
+    pyright = { autoImportCompletion = true, },
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = 'openFilesOnly',
+        useLibraryCodeForTypes = true,
+        typeCheckingMode = 'on'
+      }
+    }
+  }
 }
 
-require'lspconfig'.clangd.setup {
+
+nvim_lsp.clangd.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   cmd = { "clangd", "--background-index" }, -- si no está en tu ruta del sistema
@@ -112,28 +117,14 @@ nvim_lsp.lua_ls.setup {
   },
 }
 
-nvim_lsp.tailwindcss.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
-
-nvim_lsp.cssls.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
-
-nvim_lsp.astro.setup {
-  on_attach = on_attach,
-  capabilities = capabilities
-}
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-  underline = true,
-  update_in_insert = false,
-  virtual_text = { spacing = 4, prefix = "●" },
-  severity_sort = true,
-}
+    underline = true,
+    update_in_insert = false,
+    virtual_text = { spacing = 4, prefix = "●" },
+    severity_sort = true,
+  }
 )
 
 -- Diagnostic symbols in the sign column (gutter)
